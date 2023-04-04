@@ -1,18 +1,15 @@
 import os
-import discord
-from discord.ext import commands
+from flask import Flask, request
+from dotenv import load_dotenv
 
-# 環境変数からDiscordボットトークンを取得
-DISCORD_BOT_TOKEN = os.environ["DISCORD_BOT_TOKEN"]
+load_dotenv()
 
-# Discordボットを初期化
-intents = discord.Intents.default()
-intents.typing = False
-intents.presences = False
-bot = commands.Bot(command_prefix="!", intents=intents)
+app = Flask(__name__)
 
-@bot.event
-async def on_ready():
-    print(f"{bot.user.name} is online!")
+@app.route("/")
+def home():
+    return "ChatGPT4 is online!"
 
-bot.run(DISCORD_BOT_TOKEN)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, port=port, host="0.0.0.0")
